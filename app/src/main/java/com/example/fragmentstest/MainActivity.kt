@@ -18,6 +18,10 @@ class MainActivity : AppCompatActivity(), IPassData {
         supportFragmentManager.beginTransaction()
             .add(R.id.fl_fragment_list, FragmentList(this))
             .commit()
+        supportFragmentManager.beginTransaction()
+            .add(R.id.fl_fragment_display, BlankFragment(supportFragmentManager,
+                usersReference, this))
+            .commit()
     }
 
     fun initialize(usersReference: MutableList<User>) {
@@ -37,8 +41,11 @@ class MainActivity : AppCompatActivity(), IPassData {
     }
 
     override fun onUpdateUser() {
+        val usersReference = (this.application as MyApplication).globalUsers
+
         supportFragmentManager.beginTransaction()
-            .remove(fragmentDisplay!!)
+            .replace(R.id.fl_fragment_display, BlankFragment(supportFragmentManager,
+                usersReference, this))
             .commit()
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_fragment_list, FragmentList(this))
@@ -49,6 +56,14 @@ class MainActivity : AppCompatActivity(), IPassData {
         fragmentDisplay = FragmentDisplay(this, bundle)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_fragment_display, fragmentDisplay!!)
+            .commit()
+    }
+
+    override fun onCreateUser(user: User) {
+        val usersReference = (this.application as MyApplication).globalUsers
+        usersReference.add(user)
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fl_fragment_list, FragmentList(this))
             .commit()
     }
 }

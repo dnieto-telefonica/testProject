@@ -12,6 +12,7 @@ class MyViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
         view.mr_tv_name.setText(user.name)
         view.mr_tv_number.setText(user.number)
         if (user.isFavorite)
-            view.circleImageView.borderColor = Color.parseColor("#10B041")
+            view.circleImageView.borderColor =
+                Color.parseColor("#10B041")
     }
 }
