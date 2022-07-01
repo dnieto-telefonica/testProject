@@ -10,31 +10,25 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.FragmentResultListener
+import com.example.app.models.CustomAdapter
 import com.example.app.models.User
 import com.example.fragmentstest.interfaces.IPassData
 import kotlinx.android.synthetic.main.fragment_display.*
 import kotlinx.android.synthetic.main.row_main.*
 
-class FragmentDisplay(passDataP: IPassData, bundleP: Bundle) : Fragment() {
+class FragmentDisplay(val adapter: CustomAdapter, passDataP: IPassData, bundleP: Bundle) : Fragment() {
     var isFavorite: Boolean = false
     var user: User = User("0", "a", "b", "c", R.drawable.a, true)
-    var isEditted: Boolean = false
+    private var isEditted: Boolean = false
     var isUserSelected: Boolean = false
     var passData: IPassData = passDataP
     val bundle: Bundle = bundleP
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-    }
 
     override fun onResume() {
         super.onResume()
         var position = 0
 
         isUserSelected = true
-        val usersReference =
-            (this.requireActivity().applicationContext
-                    as MyApplication).globalUsers
 
         user.name = bundle.getString("userName")!!
         user.number = bundle.getString("userNumber")!!
@@ -43,7 +37,7 @@ class FragmentDisplay(passDataP: IPassData, bundleP: Bundle) : Fragment() {
         user.photo = bundle.getInt("userPhoto")!!
         user.isFavorite = bundle.getBoolean("userIsFavorite")!!
         position = bundle.getInt("position")
-        Log.d("DENTRO", user.name)
+
         ti_name.setText(user.name)
         ti_number.setText(user.number)
         ti_address.setText(user.address)
@@ -54,7 +48,7 @@ class FragmentDisplay(passDataP: IPassData, bundleP: Bundle) : Fragment() {
         else
             btn_fav.setText("Añadir a favoritos")
 
-        initializeEvents(usersReference[position], usersReference, position)
+        initializeEvents(adapter.usersList[position], adapter.usersList, position)
     }
 
     override fun onCreateView(
@@ -64,7 +58,15 @@ class FragmentDisplay(passDataP: IPassData, bundleP: Bundle) : Fragment() {
         return inflater.inflate(R.layout.fragment_display, container, false)
     }
 
-    fun initializeEvents(user: User, usersReference: MutableList<User>, position: Int) {
+    fun modifyUser(position: Int, newUser: User) {
+        val mutable = adapter.usersList.toMutableList()
+        mutable.set(position, newUser)
+        adapter.usersList = mutable.toList()
+        val usersReference = (this.requireActivity().applicationContext as MyApplication).globalUsers
+        usersReference.set(position, newUser)
+    }
+
+    fun initializeEvents(user: User, usersReference: List<User>, position: Int) {
         ti_name.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
             if (!hasFocus) {
                 val newName = ti_name.text.toString()
@@ -118,30 +120,27 @@ class FragmentDisplay(passDataP: IPassData, bundleP: Bundle) : Fragment() {
                     user.photo,
                     isFavorite
                 )
-                usersReference.set(position, newUser)
-
+                modifyUser(position, newUser)
                 isEditted = false
                 fab.backgroundTintList = this.getResources().getColorStateList(R.color.red)
                 fab.setImageResource(R.drawable.ic_delete)
-                var bundle: Bundle = Bundle()
-                passData.onUpdateUser()
             } else {
-
                 AlertDialog.Builder(this.requireContext())
                     .setTitle("Eliminar contacto")
                     .setMessage("¿Estas seguro de querer eliminar este contacto?")
                     .setPositiveButton("SI",
                         DialogInterface.OnClickListener { dialog, which ->
+                            val mutable = adapter.usersList.toMutableList()
+                            val usersReference = (this.requireActivity().applicationContext as MyApplication).globalUsers
+                            mutable.removeAt(position)
+                            adapter.usersList = mutable.toList()
                             usersReference.removeAt(position)
-                            var bundle: Bundle = Bundle()
-                            passData.onUpdateUser()
+                            passData.onDeleteSearch()
                         })
                     .setNegativeButton("NO", null)
                     .setIcon(android.R.drawable.ic_dialog_alert)
                     .show()
             }
         }
-
     }
-
 }

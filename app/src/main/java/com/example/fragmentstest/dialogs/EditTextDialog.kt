@@ -19,12 +19,12 @@ import com.example.fragmentstest.interfaces.IPassData
 import kotlinx.android.synthetic.main.dialog_edit_text.*
 
 class EditTextDialog(
-    val users: MutableList<User>,
+    val users: List<User>,
     val passData: IPassData,
 ) : DialogFragment() {
 
     companion object {
-        fun newInstance(users: MutableList<User>, passData: IPassData): EditTextDialog {
+        fun newInstance(users: List<User>, passData: IPassData): EditTextDialog {
             val dialog = EditTextDialog(users, passData)
             return dialog
         }

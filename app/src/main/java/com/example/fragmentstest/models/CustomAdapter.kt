@@ -11,18 +11,23 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fragmentstest.R
 import com.example.fragmentstest.interfaces.IPassData
+import kotlin.properties.Delegates
 
-class CustomAdapter(private val users: MutableList<User>,
-                    private val passData: IPassData
+class CustomAdapter(private val passData: IPassData
 ): RecyclerView.Adapter<MyViewHolder>() {
-    private var oldPersonList: MutableList<User> = ArrayList()
-    private var selectedRow: Int = -1
+    var usersList: List<User> by Delegates.observable(emptyList()) { _, old, new ->
+        val diffUtil = MyDiffUtil(old, new)
+        val diffResults = DiffUtil.calculateDiff(diffUtil)
+        diffResults.dispatchUpdatesTo(this)
+    }
+    var selectedRow: Int = -1
+
     override fun getItemCount(): Int {
-        return users.size
+        return usersList.size
     }
 
     override fun onBindViewHolder(holder: MyViewHolder, position: Int) {
-        val currentUser = users[position]
+        val currentUser = usersList[position]
         if (position == selectedRow)
             holder.itemView.setBackgroundColor(Color.parseColor("#6200EE"));
         else
@@ -38,15 +43,16 @@ class CustomAdapter(private val users: MutableList<User>,
         var view: View = LayoutInflater.from(parent.context).inflate(
             R.layout.row_main,
             parent, false)
-        var bundle: Bundle = Bundle()
-        bundle.putString("userId", users[viewType].id)
-        bundle.putString("userName", users[viewType].name)
-        bundle.putString("userNumber", users[viewType].number)
-        bundle.putInt("userPhoto", users[viewType].photo)
-        bundle.putBoolean("userIsFavorite", users[viewType].isFavorite)
-        bundle.putString("userAddress", users[viewType].address)
-        bundle.putInt("position", viewType)
         view.setOnClickListener {
+            var bundle: Bundle = Bundle()
+            Log.d("INFO", viewType.toString() + " " + usersList[viewType].toString())
+            bundle.putString("userId", usersList[viewType].id)
+            bundle.putString("userName", usersList[viewType].name)
+            bundle.putString("userNumber", usersList[viewType].number)
+            bundle.putInt("userPhoto", usersList[viewType].photo)
+            bundle.putBoolean("userIsFavorite", usersList[viewType].isFavorite)
+            bundle.putString("userAddress", usersList[viewType].address)
+            bundle.putInt("position", viewType)
             passData.onSelectUser(bundle)
             selectedRow = viewType
             notifyDataSetChanged()
@@ -54,11 +60,5 @@ class CustomAdapter(private val users: MutableList<User>,
         return MyViewHolder(
             view = view
         )
-    }
-
-    fun setData(newPersonList: MutableList<User>) {
-        val diffUtil = MyDiffUtil(oldPersonList, newPersonList)
-        val diffResults = DiffUtil.calculateDiff(diffUtil)
-        diffResults.dispatchUpdatesTo(this)
     }
 }

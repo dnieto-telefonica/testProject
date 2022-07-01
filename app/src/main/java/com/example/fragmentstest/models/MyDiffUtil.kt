@@ -3,8 +3,8 @@ package com.example.app.models
 import androidx.recyclerview.widget.DiffUtil
 
 class MyDiffUtil (
-    private val oldList: MutableList<User>,
-    private val newList: MutableList<User>): DiffUtil.Callback() {
+    private val oldList: List<User>,
+    private val newList: List<User>): DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size
