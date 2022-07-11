@@ -13,14 +13,13 @@ import com.example.fragmentstest.R
 import com.example.fragmentstest.interfaces.IPassData
 import kotlin.properties.Delegates
 
-class CustomAdapter(private val passData: IPassData
-): RecyclerView.Adapter<MyViewHolder>() {
+class CustomAdapter(private val passData: IPassData): RecyclerView.Adapter<MyViewHolder>() {
+    var selectedRow: Int = -1
     var usersList: List<User> by Delegates.observable(emptyList()) { _, old, new ->
         val diffUtil = MyDiffUtil(old, new)
         val diffResults = DiffUtil.calculateDiff(diffUtil)
         diffResults.dispatchUpdatesTo(this)
     }
-    var selectedRow: Int = -1
 
     override fun getItemCount(): Int {
         return usersList.size

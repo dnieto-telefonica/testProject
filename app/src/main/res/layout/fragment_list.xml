@@ -6,6 +6,7 @@
     android:background="@color/purple_200"
     android:id="@+id/fragment_list"
     android:orientation="vertical"
+    android:focusable="true" android:focusableInTouchMode="true"
     tools:context=".FragmentList">
     <EditText
         android:id="@+id/et_searchbar"

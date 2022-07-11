@@ -18,7 +18,6 @@ import kotlinx.android.synthetic.main.row_main.*
 
 class FragmentDisplay(val adapter: CustomAdapter, passDataP: IPassData, bundleP: Bundle) : Fragment() {
     var isFavorite: Boolean = false
-    var user: User = User("0", "a", "b", "c", R.drawable.a, true)
     private var isEditted: Boolean = false
     var isUserSelected: Boolean = false
     var passData: IPassData = passDataP
@@ -29,20 +28,12 @@ class FragmentDisplay(val adapter: CustomAdapter, passDataP: IPassData, bundleP:
         var position = 0
 
         isUserSelected = true
-
-        user.name = bundle.getString("userName")!!
-        user.number = bundle.getString("userNumber")!!
-        user.address = bundle.getString("userAddress")!!
-        user.id = bundle.getString("userId")!!
-        user.photo = bundle.getInt("userPhoto")!!
-        user.isFavorite = bundle.getBoolean("userIsFavorite")!!
         position = bundle.getInt("position")
-
-        ti_name.setText(user.name)
-        ti_number.setText(user.number)
-        ti_address.setText(user.address)
-        app_bar_image.setImageResource(user.photo)
-        isFavorite = user.isFavorite
+        ti_name.setText(bundle.getString("userName"))
+        ti_number.setText(bundle.getString("userNumber"))
+        ti_address.setText(bundle.getString("userAddress"))
+        app_bar_image.setImageResource(bundle.getInt("userPhoto"))
+        isFavorite = bundle.getBoolean("userIsFavorite")
         if (isFavorite)
             btn_fav.setText("Quitar de favoritos")
         else
