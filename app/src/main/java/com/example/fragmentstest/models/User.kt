@@ -1,4 +1,4 @@
-package com.example.app.models
+package com.example.fragmentstest.models
 
 import java.io.Serializable
 

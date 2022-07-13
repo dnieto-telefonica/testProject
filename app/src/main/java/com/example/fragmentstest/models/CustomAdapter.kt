@@ -1,4 +1,4 @@
-package com.example.app.models
+package com.example.fragmentstest.models
 
 import android.graphics.Color
 import android.os.Bundle
@@ -6,14 +6,15 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fragmentstest.R
-import com.example.fragmentstest.interfaces.IPassData
+import com.example.fragmentstest.views.IMainActivityView
 import kotlin.properties.Delegates
 
-class CustomAdapter(private val passData: IPassData): RecyclerView.Adapter<MyViewHolder>() {
+class CustomAdapter(
+    private val mainActivityView: IMainActivityView
+): RecyclerView.Adapter<MyViewHolder>() {
     var selectedRow: Int = -1
     var usersList: List<User> by Delegates.observable(emptyList()) { _, old, new ->
         val diffUtil = MyDiffUtil(old, new)
@@ -52,7 +53,7 @@ class CustomAdapter(private val passData: IPassData): RecyclerView.Adapter<MyVie
             bundle.putBoolean("userIsFavorite", usersList[viewType].isFavorite)
             bundle.putString("userAddress", usersList[viewType].address)
             bundle.putInt("position", viewType)
-            passData.onSelectUser(bundle)
+            mainActivityView.onSelectUser(bundle)
             selectedRow = viewType
             notifyDataSetChanged()
         }
