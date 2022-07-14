@@ -1,6 +1,6 @@
 package com.example.fragmentstest.views
 
-interface IFragmentDisplayView {
+interface FragmentDisplayView {
 
     fun onEditUser()
 

@@ -7,30 +7,30 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AlertDialog
+import com.example.fragmentstest.MainActivity
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.MyApplication
 import com.example.fragmentstest.R
 import com.example.fragmentstest.interactors.EditUserUseCase
 import com.example.fragmentstest.interactors.RemoveUserUserCase
-import com.example.fragmentstest.interfaces.IStorage
+import com.example.fragmentstest.interfaces.Storage
 import com.example.fragmentstest.presenters.FragmentDisplayPresenter
-import com.example.fragmentstest.views.IFragmentDisplayView
-import com.example.fragmentstest.views.IMainActivityView
+import com.example.fragmentstest.views.FragmentDisplayView
+import com.example.fragmentstest.views.MainActivityView
 import kotlinx.android.synthetic.main.fragment_display.*
 
 class FragmentDisplay(
-    mainActivityViewP: IMainActivityView,
-    bundleP: Bundle)
-: Fragment(), IFragmentDisplayView {
-    val bundle: Bundle = bundleP
+    val user: User,
+    val position: Int
+) : Fragment(), FragmentDisplayView {
+    private val mainActivityView: MainActivityView by lazy { activity as MainActivity }
 
     var isFavorite: Boolean = false
-    private var isEditted: Boolean = false
+    private var isEdited: Boolean = false
     var isUserSelected: Boolean = false
 
-    lateinit var myStorage: IStorage
+    lateinit var myStorage: Storage
     lateinit var presenter: FragmentDisplayPresenter
-    var mainActivityView: IMainActivityView = mainActivityViewP
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -42,12 +42,11 @@ class FragmentDisplay(
         super.onResume()
 
         isUserSelected = true
-        var position: Int = bundle.getInt("position")
-        ti_name.setText(bundle.getString("userName"))
-        ti_number.setText(bundle.getString("userNumber"))
-        ti_address.setText(bundle.getString("userAddress"))
-        app_bar_image.setImageResource(bundle.getInt("userPhoto"))
-        isFavorite = bundle.getBoolean("userIsFavorite")
+        ti_name.setText(user.name)
+        ti_number.setText(user.number)
+        ti_address.setText(user.address)
+        app_bar_image.setImageResource(user.photo)
+        isFavorite = user.isFavorite
         if (isFavorite)
             btn_fav.setText(R.string.leave_fav)
         else
@@ -85,7 +84,7 @@ class FragmentDisplay(
                 btn_fav.setText(R.string.add_fav)
         }
         fab.setOnClickListener {
-            if (isEditted) {
+            if (isEdited) {
                 val newUser: User = User(
                     user.id,
                     ti_name.text.toString(),
@@ -114,7 +113,7 @@ class FragmentDisplay(
         if (newData != oldData) {
             fab.backgroundTintList = this.getResources().getColorStateList(R.color.green)
             fab.setImageResource(R.drawable.ic_edit)
-            isEditted = true
+            isEdited = true
         }
     }
 
@@ -123,7 +122,7 @@ class FragmentDisplay(
     }
 
     override fun onEditUser() {
-        isEditted = false
+        isEdited = false
         mainActivityView.onEditUser()
         fab.backgroundTintList = this.getResources().getColorStateList(R.color.red)
         fab.setImageResource(R.drawable.ic_delete)

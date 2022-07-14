@@ -1,12 +1,13 @@
 package com.example.fragmentstest.views
 
 import android.os.Bundle
+import com.example.fragmentstest.models.User
 
-interface IMainActivityView {
+interface MainActivityView {
 
     fun setupFragments()
 
-    fun onSelectUser(bundle: Bundle)
+    fun onSelectUser(user: User, position: Int)
 
     fun onCreateUser()
 

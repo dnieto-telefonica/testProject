@@ -1,13 +1,12 @@
 package com.example.fragmentstest.interactors
 
-import androidx.fragment.app.Fragment
-import com.example.fragmentstest.interfaces.IAddUserUseCase
-import com.example.fragmentstest.interfaces.IStorage
+import com.example.fragmentstest.interfaces.AddUserUseCase
+import com.example.fragmentstest.interfaces.Storage
 import com.example.fragmentstest.models.User
 
-class AddUserUseCase() : Fragment(), IAddUserUseCase {
+class AddUserUseCase() : AddUserUseCase {
 
-    override fun addUser(myStorage: IStorage, user: User) {
+    override fun addUser(myStorage: Storage, user: User) {
         myStorage.addUser(user)
     }
 }

@@ -2,8 +2,8 @@ package com.example.fragmentstest.interfaces
 
 import com.example.fragmentstest.models.User
 
-interface IEditUserUseCase {
+interface EditUserUseCase {
 
-    fun editUser(myStorage: IStorage, position: Int, user: User)
+    fun editUser(myStorage: Storage, position: Int, user: User)
 
 }

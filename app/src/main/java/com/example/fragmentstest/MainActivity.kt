@@ -6,28 +6,26 @@ import com.example.fragmentstest.fragments.FragmentBlank
 import com.example.fragmentstest.fragments.FragmentDisplay
 import com.example.fragmentstest.fragments.FragmentList
 import com.example.fragmentstest.interactors.AddUserUseCase
-import com.example.fragmentstest.interfaces.IStorage
+import com.example.fragmentstest.interfaces.Storage
+import com.example.fragmentstest.models.User
 import com.example.fragmentstest.presenters.MainActivityPresenter
-import com.example.fragmentstest.views.IMainActivityView
+import com.example.fragmentstest.views.MainActivityView
 
-class MainActivity : AppCompatActivity(), IMainActivityView {
-    private lateinit var myStorage: IStorage
-    private lateinit var presenter: MainActivityPresenter
+class MainActivity : AppCompatActivity(), MainActivityView {
+    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter(this, AddUserUseCase(), myStorage) }
+    private val myStorage: Storage by lazy { (this.application as MyApplication).myDatabase }
 
     var fragmentDisplay: FragmentDisplay? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        myStorage = (this.application as MyApplication).myDatabase
-        presenter = MainActivityPresenter(this, AddUserUseCase(), myStorage)
-        this.setupFragments()
+        setupFragments()
     }
 
     override fun onDeleteSearch() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_fragment_display, FragmentBlank(supportFragmentManager,
-                presenter, myStorage)
+            .replace(R.id.fl_fragment_display, FragmentBlank(myStorage)
             )
             .commit()
         (supportFragmentManager.findFragmentById(R.id.fl_fragment_list) as FragmentList).onDeleteUser()
@@ -35,18 +33,17 @@ class MainActivity : AppCompatActivity(), IMainActivityView {
 
     override fun setupFragments() {
         supportFragmentManager.beginTransaction()
-            .add(R.id.fl_fragment_list, FragmentList(this))
+            .add(R.id.fl_fragment_list, FragmentList())
             .commit()
         supportFragmentManager.beginTransaction()
             .add(R.id.fl_fragment_display,
-                FragmentBlank(supportFragmentManager,
-                    presenter, myStorage)
+                FragmentBlank(myStorage)
             )
             .commit()
     }
 
-    override fun onSelectUser(bundle: Bundle) {
-        fragmentDisplay = FragmentDisplay( this, bundle)
+    override fun onSelectUser(user: User, position: Int) {
+        fragmentDisplay = FragmentDisplay(user, position)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_fragment_display, fragmentDisplay!!)
             .commit()
@@ -60,4 +57,8 @@ class MainActivity : AppCompatActivity(), IMainActivityView {
         (supportFragmentManager.findFragmentById(R.id.fl_fragment_list) as FragmentList).onEditUser()
     }
 
+    fun addUser(user: User) {
+        presenter.addUser(user)
+    }
 }
+

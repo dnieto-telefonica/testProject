@@ -7,19 +7,18 @@ import android.widget.EditText
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
+import com.example.fragmentstest.MainActivity
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.R
-import com.example.fragmentstest.interfaces.IStorage
-import com.example.fragmentstest.presenters.MainActivityPresenter
+import com.example.fragmentstest.interfaces.Storage
 
 class EditTextDialog(
-    private val presenter: MainActivityPresenter,
-    val myStorage: IStorage
+    val myStorage: Storage
 ) : DialogFragment() {
 
     companion object {
-        fun newInstance(presenter: MainActivityPresenter, myStorage: IStorage): EditTextDialog {
-            val dialog = EditTextDialog(presenter, myStorage)
+        fun newInstance(myStorage: Storage): EditTextDialog {
+            val dialog = EditTextDialog(myStorage)
             return dialog
         }
     }
@@ -48,7 +47,7 @@ class EditTextDialog(
                         etNumber.text.toString(),
                         etAddress.text.toString(),
                         R.drawable.ic_launcher_background, false)
-                    presenter.addUser(user)
+                    (activity as MainActivity).addUser(user)
                 } else {
                     Toast.makeText(this.requireActivity().applicationContext,
                         getString(R.string.error_creating_user), Toast.LENGTH_SHORT).show()
@@ -63,4 +62,5 @@ class EditTextDialog(
 
         return dialog
     }
+
 }

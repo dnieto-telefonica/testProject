@@ -12,29 +12,27 @@ import android.view.View.OnTouchListener
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.fragmentstest.MainActivity
 import com.example.fragmentstest.models.CustomAdapter
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.MyApplication
 import com.example.fragmentstest.R
 import com.example.fragmentstest.interactors.SearchUsersUseCase
-import com.example.fragmentstest.interfaces.IStorage
-import com.example.fragmentstest.views.IMainActivityView
+import com.example.fragmentstest.interfaces.Storage
 import com.example.fragmentstest.presenters.FragmentListPresenter
-import com.example.fragmentstest.views.IFragmentListView
+import com.example.fragmentstest.views.FragmentListView
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class FragmentList(
-    private val mainActivityView: IMainActivityView
-) : Fragment(), IFragmentListView {
-    var customAdapter = CustomAdapter(mainActivityView)
+class FragmentList() : Fragment(), FragmentListView {
+    private val customAdapter by lazy { CustomAdapter(::onSelectUser) }
 
-    private lateinit var myStorage: IStorage
+    private lateinit var myStorage: Storage
     lateinit var presenter: FragmentListPresenter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         myStorage = (this.context?.applicationContext as MyApplication).myDatabase
-        presenter = FragmentListPresenter(this, SearchUsersUseCase(), myStorage)
+        presenter = FragmentListPresenter(this, (activity as MainActivity), SearchUsersUseCase(), myStorage)
     }
 
     override fun onCreateView(
@@ -51,7 +49,7 @@ class FragmentList(
     }
 
     override fun setupList() {
-        customAdapter.usersList = myStorage.getUsers().toList()
+        customAdapter.usersList = myStorage.getUsers()
 
         rv_users.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -99,20 +97,24 @@ class FragmentList(
         et_searchbar.setCompoundDrawablesWithIntrinsicBounds(0, 0,
             R.drawable.ic_search, 0);
         customAdapter.usersList = myStorage.getUsers()
-        mainActivityView.onDeleteSearch()
+        (activity as MainActivity).onDeleteSearch()
+    }
+
+    private fun onSelectUser(user: User, position: Int) {
+        presenter.selectUser(user, position)
     }
 
     fun onDeleteUser() {
         customAdapter.selectedRow = -1
-        customAdapter.usersList = myStorage.getUsers().toList()
+        customAdapter.usersList = myStorage.getUsers()
     }
 
     fun onCreateUser() {
-        customAdapter.usersList = myStorage.getUsers().toList()
+        customAdapter.usersList = myStorage.getUsers()
     }
 
     fun onEditUser() {
-        customAdapter.usersList = myStorage.getUsers().toList()
+        customAdapter.usersList = myStorage.getUsers()
     }
 
 }

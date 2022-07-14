@@ -1,13 +1,11 @@
 package com.example.fragmentstest.databases
 
 import com.example.fragmentstest.models.User
-import com.example.fragmentstest.interfaces.IStorage
+import com.example.fragmentstest.interfaces.Storage
 
-class LocalStorage : IStorage {
+class LocalStorage : Storage {
 
-    override fun getUsers(): MutableList<User> {
-        return DataMemoryAbstraction.usersReference
-    }
+    override fun getUsers(): List<User> = DataMemoryAbstraction.usersReference.toList()
 
     override fun editUser(position: Int, user: User) {
         DataMemoryAbstraction.usersReference[position] = user

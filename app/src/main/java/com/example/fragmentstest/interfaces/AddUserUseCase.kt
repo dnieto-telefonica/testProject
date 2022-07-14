@@ -2,7 +2,7 @@ package com.example.fragmentstest.interfaces
 
 import com.example.fragmentstest.models.User
 
-interface IAddUserUseCase {
+interface AddUserUseCase {
 
-    fun addUser(myStorage: IStorage, user: User)
+    fun addUser(myStorage: Storage, user: User)
 }

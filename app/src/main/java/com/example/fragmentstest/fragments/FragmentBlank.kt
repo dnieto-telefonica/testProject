@@ -6,24 +6,21 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.fragment.app.FragmentManager
 import com.example.fragmentstest.R
 import com.example.fragmentstest.dialogs.EditTextDialog
-import com.example.fragmentstest.interfaces.IStorage
-import com.example.fragmentstest.presenters.MainActivityPresenter
+import com.example.fragmentstest.interfaces.Storage
 import kotlinx.android.synthetic.main.fragment_blank.*
 
-class FragmentBlank(
-    private val supportFragmentManager: FragmentManager,
-    private val presenter: MainActivityPresenter,
-    val myStorage: IStorage
-) : Fragment() {
+class FragmentBlank(val myStorage: Storage) : Fragment() {
 
     override fun onResume() {
         super.onResume()
         fab_createUser.setOnClickListener {
-            val dialog = EditTextDialog.newInstance(presenter, myStorage)
-            dialog.show(supportFragmentManager, "editDescription")
+            val dialog = EditTextDialog.newInstance(myStorage)
+            dialog.show(
+                requireActivity().supportFragmentManager,
+                "editDescription"
+            )
         }
     }
 

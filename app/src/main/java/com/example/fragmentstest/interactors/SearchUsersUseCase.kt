@@ -1,14 +1,16 @@
 package com.example.fragmentstest.interactors
 
-import androidx.fragment.app.Fragment
-import com.example.fragmentstest.interfaces.ISearchUsersUseCase
+import com.example.fragmentstest.interfaces.SearchUsersUseCase
 import com.example.fragmentstest.models.User
-import com.example.fragmentstest.interfaces.IStorage
+import com.example.fragmentstest.interfaces.Storage
 
-class SearchUsersUseCase() : Fragment(), ISearchUsersUseCase {
+class SearchUsersUseCase() :
+    SearchUsersUseCase {
 
-    override fun getFilteredUsers(myStorage: IStorage, searchCondition: String): List<User> {
-        return myStorage.getUsers().filter { it.name.toLowerCase().contains(searchCondition!!) }
+    override fun getFilteredUsers(myStorage: Storage, searchCondition: String): List<User> {
+        return myStorage.getUsers().filter {
+            it.name.toLowerCase().contains(searchCondition!!)
+        }
     }
 
 }

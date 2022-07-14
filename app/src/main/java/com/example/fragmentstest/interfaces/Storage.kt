@@ -2,9 +2,9 @@ package com.example.fragmentstest.interfaces
 
 import com.example.fragmentstest.models.User
 
-interface IStorage {
+interface Storage {
 
-    fun getUsers(): MutableList<User>
+    fun getUsers(): List<User>
 
     fun editUser(position: Int, user: User)
 

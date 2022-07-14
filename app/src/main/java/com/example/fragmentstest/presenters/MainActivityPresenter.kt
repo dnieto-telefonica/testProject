@@ -3,13 +3,13 @@ package com.example.fragmentstest.presenters
 import android.util.Log
 import com.example.fragmentstest.interactors.AddUserUseCase
 import com.example.fragmentstest.models.User
-import com.example.fragmentstest.interfaces.IStorage
-import com.example.fragmentstest.views.IMainActivityView
+import com.example.fragmentstest.interfaces.Storage
+import com.example.fragmentstest.views.MainActivityView
 
 class MainActivityPresenter(
-    var displayView: IMainActivityView?,
+    var displayView: MainActivityView?,
     private val AddUserUseCase: AddUserUseCase,
-    val myStorage: IStorage
+    val myStorage: Storage
 ) {
 
     fun addUser(user: User) {

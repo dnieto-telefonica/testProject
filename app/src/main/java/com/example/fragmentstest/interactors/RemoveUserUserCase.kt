@@ -1,12 +1,11 @@
 package com.example.fragmentstest.interactors
 
-import androidx.fragment.app.Fragment
-import com.example.fragmentstest.interfaces.IRemoveUserUseCase
-import com.example.fragmentstest.interfaces.IStorage
+import com.example.fragmentstest.interfaces.RemoveUserUseCase
+import com.example.fragmentstest.interfaces.Storage
 
-class RemoveUserUserCase() : Fragment(), IRemoveUserUseCase {
+class RemoveUserUserCase() : RemoveUserUseCase {
 
-    override fun removeUser(myStorage: IStorage, position: Int) {
+    override fun removeUser(myStorage: Storage, position: Int) {
         myStorage.removeUser(position)
     }
 

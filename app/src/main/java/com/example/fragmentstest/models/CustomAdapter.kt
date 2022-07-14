@@ -9,11 +9,11 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fragmentstest.R
-import com.example.fragmentstest.views.IMainActivityView
+import com.example.fragmentstest.views.MainActivityView
 import kotlin.properties.Delegates
 
 class CustomAdapter(
-    private val mainActivityView: IMainActivityView
+    val selectUser: ((user: User, position: Int) -> Unit)
 ): RecyclerView.Adapter<MyViewHolder>() {
     var selectedRow: Int = -1
     var usersList: List<User> by Delegates.observable(emptyList()) { _, old, new ->
@@ -44,16 +44,15 @@ class CustomAdapter(
             R.layout.row_main,
             parent, false)
         view.setOnClickListener {
-            var bundle: Bundle = Bundle()
-            Log.d("INFO", viewType.toString() + " " + usersList[viewType].toString())
-            bundle.putString("userId", usersList[viewType].id)
-            bundle.putString("userName", usersList[viewType].name)
-            bundle.putString("userNumber", usersList[viewType].number)
-            bundle.putInt("userPhoto", usersList[viewType].photo)
-            bundle.putBoolean("userIsFavorite", usersList[viewType].isFavorite)
-            bundle.putString("userAddress", usersList[viewType].address)
-            bundle.putInt("position", viewType)
-            mainActivityView.onSelectUser(bundle)
+            var selectedUser: User = User(
+                usersList[viewType].id,
+                usersList[viewType].name,
+                usersList[viewType].address,
+                usersList[viewType].number,
+                usersList[viewType].photo,
+                usersList[viewType].isFavorite
+            )
+            selectUser(selectedUser, viewType)
             selectedRow = viewType
             notifyDataSetChanged()
         }

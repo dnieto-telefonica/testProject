@@ -2,16 +2,16 @@ package com.example.fragmentstest.presenters
 
 import android.util.Log
 import com.example.fragmentstest.models.User
-import com.example.fragmentstest.interfaces.IEditUserUseCase
-import com.example.fragmentstest.interfaces.IRemoveUserUseCase
-import com.example.fragmentstest.interfaces.IStorage
-import com.example.fragmentstest.views.IFragmentDisplayView
+import com.example.fragmentstest.interfaces.EditUserUseCase
+import com.example.fragmentstest.interfaces.RemoveUserUseCase
+import com.example.fragmentstest.interfaces.Storage
+import com.example.fragmentstest.views.FragmentDisplayView
 
 class FragmentDisplayPresenter(
-    var displayView: IFragmentDisplayView?,
-    private val editUserUseCase: IEditUserUseCase,
-    private val removeUserUseCase: IRemoveUserUseCase,
-    val myStorage: IStorage
+    var displayView: FragmentDisplayView?,
+    private val editUserUseCase: EditUserUseCase,
+    private val removeUserUseCase: RemoveUserUseCase,
+    val myStorage: Storage
 ) {
 
     fun editUser(user: User, position: Int) {

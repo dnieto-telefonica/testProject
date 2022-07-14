@@ -1,8 +1,9 @@
 package com.example.fragmentstest.views
 
+import android.os.Bundle
 import com.example.fragmentstest.models.User
 
-interface IFragmentListView {
+interface FragmentListView {
 
     fun setupList()
 
