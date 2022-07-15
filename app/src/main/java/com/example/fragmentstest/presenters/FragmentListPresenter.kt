@@ -1,6 +1,5 @@
 package com.example.fragmentstest.presenters
 
-import android.os.Bundle
 import android.util.Log
 import com.example.fragmentstest.interactors.SearchUsersUseCase
 import com.example.fragmentstest.interfaces.Storage

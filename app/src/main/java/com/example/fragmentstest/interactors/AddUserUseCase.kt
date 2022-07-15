@@ -9,4 +9,5 @@ class AddUserUseCase() : AddUserUseCase {
     override fun addUser(myStorage: Storage, user: User) {
         myStorage.addUser(user)
     }
+
 }

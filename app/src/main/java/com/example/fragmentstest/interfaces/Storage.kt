@@ -1,5 +1,6 @@
 package com.example.fragmentstest.interfaces
 
+import com.example.fragmentstest.MainActivity
 import com.example.fragmentstest.models.User
 
 interface Storage {
@@ -11,5 +12,7 @@ interface Storage {
     fun addUser(user: User)
 
     fun removeUser(position: Int)
+
+    fun initialize(activity: MainActivity)
 
 }

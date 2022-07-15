@@ -12,20 +12,30 @@ import com.example.fragmentstest.presenters.MainActivityPresenter
 import com.example.fragmentstest.views.MainActivityView
 
 class MainActivity : AppCompatActivity(), MainActivityView {
-    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter(this, AddUserUseCase(), myStorage) }
-    private val myStorage: Storage by lazy { (this.application as MyApplication).myDatabase }
 
     var fragmentDisplay: FragmentDisplay? = null
+    private val presenter: MainActivityPresenter by lazy {
+        MainActivityPresenter(
+            this,
+            AddUserUseCase(),
+            myStorage
+        )
+    }
+    private val myStorage: Storage by lazy {
+        (this.application as MyApplication).myDatabase
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        myStorage.initialize(this)
         setContentView(R.layout.activity_main)
         setupFragments()
     }
 
     override fun onDeleteSearch() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_fragment_display, FragmentBlank(myStorage)
+            .replace(
+                R.id.fl_fragment_display, FragmentBlank(myStorage)
             )
             .commit()
         (supportFragmentManager.findFragmentById(R.id.fl_fragment_list) as FragmentList).onDeleteUser()
@@ -36,7 +46,8 @@ class MainActivity : AppCompatActivity(), MainActivityView {
             .add(R.id.fl_fragment_list, FragmentList())
             .commit()
         supportFragmentManager.beginTransaction()
-            .add(R.id.fl_fragment_display,
+            .add(
+                R.id.fl_fragment_display,
                 FragmentBlank(myStorage)
             )
             .commit()
@@ -60,5 +71,6 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     fun addUser(user: User) {
         presenter.addUser(user)
     }
+
 }
 

@@ -1,20 +1,17 @@
 package com.example.fragmentstest.models
 
 import android.graphics.Color
-import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.fragmentstest.R
-import com.example.fragmentstest.views.MainActivityView
 import kotlin.properties.Delegates
 
 class CustomAdapter(
     val selectUser: ((user: User, position: Int) -> Unit)
-): RecyclerView.Adapter<MyViewHolder>() {
+) : RecyclerView.Adapter<MyViewHolder>() {
     var selectedRow: Int = -1
     var usersList: List<User> by Delegates.observable(emptyList()) { _, old, new ->
         val diffUtil = MyDiffUtil(old, new)
@@ -42,13 +39,14 @@ class CustomAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         var view: View = LayoutInflater.from(parent.context).inflate(
             R.layout.row_main,
-            parent, false)
+            parent, false
+        )
         view.setOnClickListener {
             var selectedUser: User = User(
                 usersList[viewType].id,
                 usersList[viewType].name,
-                usersList[viewType].address,
                 usersList[viewType].number,
+                usersList[viewType].address,
                 usersList[viewType].photo,
                 usersList[viewType].isFavorite
             )

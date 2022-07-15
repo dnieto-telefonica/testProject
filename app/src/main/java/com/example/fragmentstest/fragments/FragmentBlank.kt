@@ -1,4 +1,3 @@
-
 package com.example.fragmentstest.fragments
 
 import android.os.Bundle

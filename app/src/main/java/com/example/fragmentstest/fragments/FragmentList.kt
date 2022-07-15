@@ -23,16 +23,14 @@ import com.example.fragmentstest.presenters.FragmentListPresenter
 import com.example.fragmentstest.views.FragmentListView
 import kotlinx.android.synthetic.main.fragment_list.*
 
-class FragmentList() : Fragment(), FragmentListView {
+class FragmentList : Fragment(), FragmentListView {
     private val customAdapter by lazy { CustomAdapter(::onSelectUser) }
 
-    private lateinit var myStorage: Storage
-    lateinit var presenter: FragmentListPresenter
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        myStorage = (this.context?.applicationContext as MyApplication).myDatabase
-        presenter = FragmentListPresenter(this, (activity as MainActivity), SearchUsersUseCase(), myStorage)
+    private val myStorage: Storage by lazy {
+        (this.context?.applicationContext as MyApplication).myDatabase
+    }
+    private val presenter: FragmentListPresenter by lazy {
+        FragmentListPresenter(this, (activity as MainActivity), SearchUsersUseCase(), myStorage)
     }
 
     override fun onCreateView(
@@ -76,7 +74,8 @@ class FragmentList() : Fragment(), FragmentListView {
         et_searchbar.setOnTouchListener(OnTouchListener { v, event ->
             if (event.action == MotionEvent.ACTION_UP) {
                 if (event.rawX >= et_searchbar.right -
-                    et_searchbar.compoundDrawables[2].bounds.width()) {
+                    et_searchbar.compoundDrawables[2].bounds.width()
+                ) {
                     this.clearSearch()
                     return@OnTouchListener true
                 }
@@ -85,7 +84,6 @@ class FragmentList() : Fragment(), FragmentListView {
         })
     }
 
-    // Dudo si esta función y la siguiente deberían delegar en el presentador
     override fun displayFoundContacts(users: List<User>) {
         customAdapter.usersList = users
         customAdapter.selectedRow = -1
@@ -94,8 +92,10 @@ class FragmentList() : Fragment(), FragmentListView {
 
     override fun clearSearch() {
         et_searchbar.setText("")
-        et_searchbar.setCompoundDrawablesWithIntrinsicBounds(0, 0,
-            R.drawable.ic_search, 0);
+        et_searchbar.setCompoundDrawablesWithIntrinsicBounds(
+            0, 0,
+            R.drawable.ic_search, 0
+        );
         customAdapter.usersList = myStorage.getUsers()
         (activity as MainActivity).onDeleteSearch()
     }

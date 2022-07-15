@@ -18,15 +18,14 @@ class EditTextDialog(
 
     companion object {
         fun newInstance(myStorage: Storage): EditTextDialog {
-            val dialog = EditTextDialog(myStorage)
-            return dialog
+            return EditTextDialog(myStorage)
         }
     }
 
-    lateinit var etName: EditText
-    lateinit var etNumber: EditText
-    lateinit var etAddress: EditText
-    var onCancel: (() -> Unit)? = null
+    private lateinit var etName: EditText
+    private lateinit var etNumber: EditText
+    private lateinit var etAddress: EditText
+    private var onCancel: (() -> Unit)? = null
 
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
         var view = requireActivity().layoutInflater.inflate(R.layout.dialog_edit_text, null)
