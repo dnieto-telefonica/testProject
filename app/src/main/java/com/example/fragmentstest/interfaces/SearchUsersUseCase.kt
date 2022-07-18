@@ -4,6 +4,6 @@ import com.example.fragmentstest.models.User
 
 interface SearchUsersUseCase {
 
-    fun getFilteredUsers(myStorage: Storage, searchCondition: String): List<User>
+    fun getFilteredUsers(searchCondition: String): List<User>
 
 }

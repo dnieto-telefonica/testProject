@@ -13,6 +13,6 @@ interface Storage {
 
     fun removeUser(position: Int)
 
-    fun initialize(activity: MainActivity)
+    fun initialize()
 
 }

@@ -8,18 +8,15 @@ import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.DialogFragment
 import com.example.fragmentstest.MainActivity
+import com.example.fragmentstest.MyApplication
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.R
 import com.example.fragmentstest.interfaces.Storage
 
-class EditTextDialog(
-    val myStorage: Storage
-) : DialogFragment() {
+class EditTextDialog : DialogFragment() {
 
-    companion object {
-        fun newInstance(myStorage: Storage): EditTextDialog {
-            return EditTextDialog(myStorage)
-        }
+    private val myStorage: Storage? by lazy {
+        (this.context?.applicationContext as MyApplication).myDatabase
     }
 
     private lateinit var etName: EditText
@@ -41,7 +38,7 @@ class EditTextDialog(
                 val number = etNumber.text.toString()
                 val address = etAddress.text.toString()
                 if (name != "" && number != "" && address != "") {
-                    var user = User(myStorage.getUsers().size.toString(),
+                    var user = User(myStorage?.getUsers()?.size.toString(),
                         etName.text.toString(),
                         etNumber.text.toString(),
                         etAddress.text.toString(),

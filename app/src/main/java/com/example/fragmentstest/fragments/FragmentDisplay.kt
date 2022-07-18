@@ -32,11 +32,14 @@ class FragmentDisplay(
     private var isFavorite: Boolean = false
     private var isEdited: Boolean = false
 
-    private val myStorage: Storage by lazy {
+    private val myStorage: Storage? by lazy {
         (this.context?.applicationContext as MyApplication).myDatabase
     }
     private val presenter: FragmentDisplayPresenter by lazy {
-        FragmentDisplayPresenter(this, EditUserUseCase(), RemoveUserUserCase(), myStorage)
+        FragmentDisplayPresenter(
+            this, EditUserUseCase(myStorage),
+            RemoveUserUserCase(myStorage), myStorage
+        )
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

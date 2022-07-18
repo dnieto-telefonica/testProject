@@ -10,7 +10,9 @@ import com.example.fragmentstest.interfaces.Storage
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
-class SharedPrefsStorage : Storage {
+class SharedPrefsStorage(
+    val activityContext: Context
+) : Storage {
 
     private val type = object : TypeToken<MutableList<User>?>() {}.type
     private lateinit var sharedPrefEditor: SharedPreferences.Editor
@@ -44,10 +46,11 @@ class SharedPrefsStorage : Storage {
         saveList(usersList)
     }
 
-    override fun initialize(activity: MainActivity) {
+    override fun initialize() {
         Log.d("INFO", "Inicializando Almacenamiento Externo")
-        sharedPref = activity.getSharedPreferences(
-            activity.getString(R.string.error_creating_user), Context.MODE_PRIVATE
+        sharedPref = activityContext.getSharedPreferences(
+            activityContext.getString(R.string.error_creating_user),
+            Context.MODE_PRIVATE
         )
         sharedPrefEditor = sharedPref.edit()
     }

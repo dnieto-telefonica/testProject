@@ -1,9 +1,7 @@
 package com.example.fragmentstest.databases
 
-import android.Manifest
 import android.util.Log
 import com.example.fragmentstest.MainActivity
-import com.example.fragmentstest.PermissionsManager
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.interfaces.Storage
 import java.io.File
@@ -14,9 +12,10 @@ import java.io.ObjectOutputStream
 
 class FileStorage : Storage {
 
-    private val permissionsManager = PermissionsManager()
-    private lateinit var folder: File
-    private lateinit var file: File
+    lateinit var folder: File
+    private val file: File by lazy {
+        File(folder, "usersList.txt")
+    }
 
     override fun getUsers(): MutableList<User> {
         var usersList: MutableList<User> = emptyList<User>().toMutableList()
@@ -71,13 +70,8 @@ class FileStorage : Storage {
         oos.close();
     }
 
-    override fun initialize(activity: MainActivity) {
+    override fun initialize() {
         Log.d("INFO", "Inicializando Almacenamiento Externo")
-        permissionsManager.checkESPermission(
-            Manifest.permission.WRITE_EXTERNAL_STORAGE, activity
-        )
-        folder = File(activity.getExternalFilesDir(null)!!, "usersData")
-        file = File(folder, "usersList.txt")
     }
 
 }

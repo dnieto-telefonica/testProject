@@ -23,7 +23,7 @@ class LocalStorage : Storage {
         DataMemoryAbstraction.usersReference.removeAt(position)
     }
 
-    override fun initialize(activity: MainActivity) {
+    override fun initialize() {
         Log.d("INFO", "Inicializando Almacenamiento en Memoria")
         DataMemoryAbstraction.usersReference.add(
             User(

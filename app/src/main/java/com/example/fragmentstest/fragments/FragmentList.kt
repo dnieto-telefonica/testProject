@@ -26,11 +26,14 @@ import kotlinx.android.synthetic.main.fragment_list.*
 class FragmentList : Fragment(), FragmentListView {
     private val customAdapter by lazy { CustomAdapter(::onSelectUser) }
 
-    private val myStorage: Storage by lazy {
+    private val myStorage: Storage? by lazy {
         (this.context?.applicationContext as MyApplication).myDatabase
     }
     private val presenter: FragmentListPresenter by lazy {
-        FragmentListPresenter(this, (activity as MainActivity), SearchUsersUseCase(), myStorage)
+        FragmentListPresenter(
+            this, (activity as MainActivity),
+            SearchUsersUseCase(myStorage), myStorage
+        )
     }
 
     override fun onCreateView(
@@ -42,12 +45,14 @@ class FragmentList : Fragment(), FragmentListView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        Log.d("INFO", "ONVIEW")
         this.setupList()
         this.setupSearchInput()
     }
 
     override fun setupList() {
-        customAdapter.usersList = myStorage.getUsers()
+        if (myStorage?.getUsers() != null)
+            customAdapter.usersList = myStorage!!.getUsers()
 
         rv_users.apply {
             layoutManager = LinearLayoutManager(activity)
@@ -96,7 +101,7 @@ class FragmentList : Fragment(), FragmentListView {
             0, 0,
             R.drawable.ic_search, 0
         );
-        customAdapter.usersList = myStorage.getUsers()
+        reloadUsers()
         (activity as MainActivity).onDeleteSearch()
     }
 
@@ -106,15 +111,19 @@ class FragmentList : Fragment(), FragmentListView {
 
     fun onDeleteUser() {
         customAdapter.selectedRow = -1
-        customAdapter.usersList = myStorage.getUsers()
+        reloadUsers()
     }
 
     fun onCreateUser() {
-        customAdapter.usersList = myStorage.getUsers()
+        reloadUsers()
     }
 
     fun onEditUser() {
-        customAdapter.usersList = myStorage.getUsers()
+        reloadUsers()
     }
 
+    fun reloadUsers() {
+        if (myStorage?.getUsers() != null)
+            customAdapter.usersList = myStorage!!.getUsers()
+    }
 }

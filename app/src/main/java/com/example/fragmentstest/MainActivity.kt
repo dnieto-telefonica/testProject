@@ -1,7 +1,10 @@
 package com.example.fragmentstest
 
+import android.Manifest
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.fragmentstest.databases.FileStorage
 import com.example.fragmentstest.fragments.FragmentBlank
 import com.example.fragmentstest.fragments.FragmentDisplay
 import com.example.fragmentstest.fragments.FragmentList
@@ -10,24 +13,36 @@ import com.example.fragmentstest.interfaces.Storage
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.presenters.MainActivityPresenter
 import com.example.fragmentstest.views.MainActivityView
+import java.io.File
 
 class MainActivity : AppCompatActivity(), MainActivityView {
-
     var fragmentDisplay: FragmentDisplay? = null
+
     private val presenter: MainActivityPresenter by lazy {
         MainActivityPresenter(
             this,
-            AddUserUseCase(),
+            AddUserUseCase(myStorage),
             myStorage
         )
     }
-    private val myStorage: Storage by lazy {
-        (this.application as MyApplication).myDatabase
+    private val myStorage: Storage? by lazy {
+        (application as MyApplication).myDatabase
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        myStorage.initialize(this)
+        Log.d("INFO", "ONCREATE")
+
+        (applicationContext as MyApplication).myDatabase =
+            FileStorage() // Change this line to change the storage type
+
+        if (myStorage is FileStorage)
+            (myStorage as FileStorage).folder =
+                File(getExternalFilesDir(null)!!, "usersData")
+
+        PermissionsManager().checkESPermission(
+            Manifest.permission.WRITE_EXTERNAL_STORAGE, this
+        )
         setContentView(R.layout.activity_main)
         setupFragments()
     }
@@ -35,10 +50,11 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     override fun onDeleteSearch() {
         supportFragmentManager.beginTransaction()
             .replace(
-                R.id.fl_fragment_display, FragmentBlank(myStorage)
+                R.id.fl_fragment_display, FragmentBlank()
             )
             .commit()
-        (supportFragmentManager.findFragmentById(R.id.fl_fragment_list) as FragmentList).onDeleteUser()
+        (supportFragmentManager.findFragmentById(R.id.fl_fragment_list)
+                as FragmentList).onDeleteUser()
     }
 
     override fun setupFragments() {
@@ -48,7 +64,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
         supportFragmentManager.beginTransaction()
             .add(
                 R.id.fl_fragment_display,
-                FragmentBlank(myStorage)
+                FragmentBlank()
             )
             .commit()
     }

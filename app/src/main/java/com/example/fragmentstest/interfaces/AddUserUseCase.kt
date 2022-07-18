@@ -4,5 +4,5 @@ import com.example.fragmentstest.models.User
 
 interface AddUserUseCase {
 
-    fun addUser(myStorage: Storage, user: User)
+    fun addUser(user: User)
 }

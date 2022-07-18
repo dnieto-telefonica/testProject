@@ -10,12 +10,12 @@ import com.example.fragmentstest.dialogs.EditTextDialog
 import com.example.fragmentstest.interfaces.Storage
 import kotlinx.android.synthetic.main.fragment_blank.*
 
-class FragmentBlank(val myStorage: Storage) : Fragment() {
+class FragmentBlank : Fragment() {
 
     override fun onResume() {
         super.onResume()
         fab_createUser.setOnClickListener {
-            val dialog = EditTextDialog.newInstance(myStorage)
+            val dialog = EditTextDialog()
             dialog.show(
                 requireActivity().supportFragmentManager,
                 "editDescription"

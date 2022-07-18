@@ -2,6 +2,7 @@ package com.example.fragmentstest.databases
 
 import android.annotation.SuppressLint
 import android.content.ContentValues
+import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
 import android.util.Log
@@ -11,7 +12,7 @@ import com.example.fragmentstest.models.User
 import com.example.fragmentstest.interfaces.Storage
 
 class LocalDBStorage(
-    applicationContext: MyApplication
+    applicationContext: Context
 ) : Storage, SQLiteOpenHelper(applicationContext, DATABASE_NAME, null, DATABASE_VERSION) {
     private val dbWrite = this.writableDatabase
     private val dbRead = this.readableDatabase
@@ -96,7 +97,7 @@ class LocalDBStorage(
         dbWrite.delete(DBData.TABLE_NAME, selection, selectionArgs)
     }
 
-    override fun initialize(activity: MainActivity) {
+    override fun initialize() {
         Log.d("INFO", "Inicializando Base de Datos Local")
     }
 
