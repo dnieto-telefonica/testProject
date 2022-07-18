@@ -14,7 +14,7 @@ class MainActivityPresenter(
 
     fun addUser(user: User) {
         Log.d("INFO", "Añadiendo el usuario $user...")
-        AddUserUseCase.addUser(myStorage, user)
+        AddUserUseCase.addUser(user)
         displayView?.onCreateUser()
     }
 

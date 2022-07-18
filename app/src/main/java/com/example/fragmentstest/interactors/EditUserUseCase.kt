@@ -4,9 +4,9 @@ import com.example.fragmentstest.interfaces.EditUserUseCase
 import com.example.fragmentstest.interfaces.Storage
 import com.example.fragmentstest.models.User
 
-class EditUserUseCase() : EditUserUseCase {
+class EditUserUseCase(val myStorage: Storage) : EditUserUseCase {
 
-    override fun editUser(myStorage: Storage, position: Int, user: User) {
+    override fun editUser(position: Int, user: User) {
         myStorage.editUser(position, user)
     }
 

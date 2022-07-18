@@ -16,13 +16,13 @@ class FragmentDisplayPresenter(
 
     fun editUser(user: User, position: Int) {
         Log.d("INFO", "Cambiando información del usuario...")
-        editUserUseCase.editUser(myStorage, position, user)
+        editUserUseCase.editUser(position, user)
         displayView?.onEditUser()
     }
 
     fun removeUser(position: Int) {
         Log.d("INFO", "Eliminando el usuario en la posición $position...")
-        removeUserUseCase.removeUser(myStorage, position)
+        removeUserUseCase.removeUser(position)
         displayView?.onDeleteUser()
     }
 

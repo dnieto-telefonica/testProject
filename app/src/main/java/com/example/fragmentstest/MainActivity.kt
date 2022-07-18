@@ -12,8 +12,14 @@ import com.example.fragmentstest.presenters.MainActivityPresenter
 import com.example.fragmentstest.views.MainActivityView
 
 class MainActivity : AppCompatActivity(), MainActivityView {
-    private val presenter: MainActivityPresenter by lazy { MainActivityPresenter(this, AddUserUseCase(), myStorage) }
-    private val myStorage: Storage by lazy { (this.application as MyApplication).myDatabase }
+
+    private val presenter: MainActivityPresenter by lazy {
+        MainActivityPresenter(this, AddUserUseCase(myStorage), myStorage)
+    }
+
+    private val myStorage: Storage by lazy {
+        (this.application as MyApplication).myDatabase
+    }
 
     var fragmentDisplay: FragmentDisplay? = null
 
@@ -25,7 +31,8 @@ class MainActivity : AppCompatActivity(), MainActivityView {
 
     override fun onDeleteSearch() {
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_fragment_display, FragmentBlank(myStorage)
+            .replace(
+                R.id.fl_fragment_display, FragmentBlank()
             )
             .commit()
         (supportFragmentManager.findFragmentById(R.id.fl_fragment_list) as FragmentList).onDeleteUser()
@@ -36,14 +43,15 @@ class MainActivity : AppCompatActivity(), MainActivityView {
             .add(R.id.fl_fragment_list, FragmentList())
             .commit()
         supportFragmentManager.beginTransaction()
-            .add(R.id.fl_fragment_display,
-                FragmentBlank(myStorage)
+            .add(
+                R.id.fl_fragment_display,
+                FragmentBlank()
             )
             .commit()
     }
 
     override fun onSelectUser(user: User, position: Int) {
-        fragmentDisplay = FragmentDisplay(user, position)
+        fragmentDisplay = FragmentDisplay.newInstance(user, position)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_fragment_display, fragmentDisplay!!)
             .commit()
@@ -60,5 +68,6 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     fun addUser(user: User) {
         presenter.addUser(user)
     }
+
 }
 

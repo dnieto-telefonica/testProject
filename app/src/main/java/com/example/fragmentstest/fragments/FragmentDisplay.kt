@@ -19,10 +19,8 @@ import com.example.fragmentstest.views.FragmentDisplayView
 import com.example.fragmentstest.views.MainActivityView
 import kotlinx.android.synthetic.main.fragment_display.*
 
-class FragmentDisplay(
-    val user: User,
-    val position: Int
-) : Fragment(), FragmentDisplayView {
+class FragmentDisplay : Fragment(), FragmentDisplayView {
+
     private val mainActivityView: MainActivityView by lazy { activity as MainActivity }
 
     var isFavorite: Boolean = false
@@ -32,14 +30,32 @@ class FragmentDisplay(
     lateinit var myStorage: Storage
     lateinit var presenter: FragmentDisplayPresenter
 
+    companion object {
+        fun newInstance(user: User, position: Int): FragmentDisplay {
+            val f = FragmentDisplay()
+
+            val args = Bundle()
+            args.putSerializable("user", user)
+            args.putInt("position", position)
+            f.arguments = args
+
+            return f
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         myStorage = (this.context?.applicationContext as MyApplication).myDatabase
-        presenter = FragmentDisplayPresenter(this, EditUserUseCase(), RemoveUserUserCase(), myStorage)
+        presenter = FragmentDisplayPresenter(
+            this, EditUserUseCase(myStorage),
+            RemoveUserUserCase(myStorage), myStorage
+        )
     }
 
     override fun onResume() {
         super.onResume()
+        val user = arguments?.getSerializable("user") as User
+        val position = arguments?.getInt("position") ?: 0
 
         isUserSelected = true
         ti_name.setText(user.name)
@@ -62,7 +78,7 @@ class FragmentDisplay(
         return inflater.inflate(R.layout.fragment_display, container, false)
     }
 
-    fun initializeEvents(user: User, usersReference: List<User>, position: Int) {
+    private fun initializeEvents(user: User, usersReference: List<User>, position: Int) {
         ti_name.setOnFocusChangeListener(View.OnFocusChangeListener { v, hasFocus ->
             if (!hasFocus)
                 this.setIsEditing(ti_name.text.toString(), user.name)

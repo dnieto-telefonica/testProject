@@ -2,10 +2,10 @@ package com.example.fragmentstest.models
 
 import androidx.recyclerview.widget.DiffUtil
 
-class MyDiffUtil (
+class MyDiffUtil(
     private val oldList: List<User>,
     private val newList: List<User>
-): DiffUtil.Callback() {
+) : DiffUtil.Callback() {
     override fun getOldListSize(): Int = oldList.size
 
     override fun getNewListSize(): Int = newList.size

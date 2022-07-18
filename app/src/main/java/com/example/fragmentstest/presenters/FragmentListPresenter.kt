@@ -17,7 +17,7 @@ class FragmentListPresenter(
 
     fun performSearch(searchCondition: String) {
         Log.d("INFO", "Buscando la condición $searchCondition...")
-        val users = searchUsersUseCase.getFilteredUsers(myStorage, searchCondition)
+        val users = searchUsersUseCase.getFilteredUsers(searchCondition)
         listView?.displayFoundContacts(users)
     }
 

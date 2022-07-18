@@ -5,7 +5,8 @@ import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.row_main.view.*
 
-class MyViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
+class MyViewHolder(private val view: View) : RecyclerView.ViewHolder(view) {
+
     fun onBindViewHolder(user: User) {
         view.circleImageView.setImageResource(user.photo)
         view.mr_tv_name.text = user.name
@@ -14,4 +15,5 @@ class MyViewHolder(private val view: View): RecyclerView.ViewHolder(view) {
             view.circleImageView.borderColor =
                 Color.parseColor("#10B041")
     }
+
 }
