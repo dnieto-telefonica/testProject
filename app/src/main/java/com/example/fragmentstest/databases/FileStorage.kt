@@ -1,7 +1,5 @@
 package com.example.fragmentstest.databases
 
-import android.util.Log
-import com.example.fragmentstest.MainActivity
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.interfaces.Storage
 import java.io.File
@@ -32,12 +30,15 @@ class FileStorage : Storage {
         return usersList
     }
 
-    override fun editUser(position: Int, user: User) {
+    override fun editUser(user: User) {
         var users = this.getUsers()
         val fos = FileOutputStream(file);
         val oos = ObjectOutputStream(fos);
 
-        users[position] = user
+        val selectedUser = users.find { it.id == user.id }
+        users.remove(selectedUser)
+        users.add(user)
+        users.sortBy { it.name }
         oos.writeObject(users);
 
         fos.close()
@@ -57,21 +58,17 @@ class FileStorage : Storage {
         oos.close();
     }
 
-    override fun removeUser(position: Int) {
+    override fun removeUser(user: User) {
         var users = this.getUsers()
         val fos = FileOutputStream(file);
         val oos = ObjectOutputStream(fos);
 
-        users.removeAt(position)
+        users.remove(user)
         users.sortBy { it.name }
         oos.writeObject(users);
 
         fos.close()
         oos.close();
-    }
-
-    override fun initialize() {
-        Log.d("INFO", "Inicializando Almacenamiento Externo")
     }
 
 }

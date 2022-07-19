@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.fragmentstest.databases.FileStorage
+import com.example.fragmentstest.databases.RoomLocalDBStorage
+import com.example.fragmentstest.databases.SharedPrefsStorage
 import com.example.fragmentstest.fragments.FragmentBlank
 import com.example.fragmentstest.fragments.FragmentDisplay
 import com.example.fragmentstest.fragments.FragmentList
@@ -31,10 +33,9 @@ class MainActivity : AppCompatActivity(), MainActivityView {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        Log.d("INFO", "ONCREATE")
 
         (applicationContext as MyApplication).myDatabase =
-            FileStorage() // Change this line to change the storage type
+            SharedPrefsStorage(applicationContext) // Change this line to change the storage type
 
         if (myStorage is FileStorage)
             (myStorage as FileStorage).folder =

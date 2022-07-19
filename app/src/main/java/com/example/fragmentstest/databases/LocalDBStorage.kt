@@ -5,9 +5,6 @@ import android.content.ContentValues
 import android.content.Context
 import android.database.sqlite.SQLiteDatabase
 import android.database.sqlite.SQLiteOpenHelper
-import android.util.Log
-import com.example.fragmentstest.MainActivity
-import com.example.fragmentstest.MyApplication
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.interfaces.Storage
 
@@ -58,7 +55,7 @@ class LocalDBStorage(
         return usersList
     }
 
-    override fun editUser(position: Int, user: User) {
+    override fun editUser(user: User) {
         val values = ContentValues().apply {
             put(DBData.COLUMN_NAME_ID, user.id)
             put(DBData.COLUMN_NAME_NAME, user.name)
@@ -91,14 +88,10 @@ class LocalDBStorage(
         dbWrite?.insert(DBData.TABLE_NAME, null, values)
     }
 
-    override fun removeUser(position: Int) {
+    override fun removeUser(user: User) {
         val selection = "${DBData.COLUMN_NAME_ID} LIKE ?"
-        val selectionArgs = arrayOf(position.toString())
+        val selectionArgs = arrayOf(user.id)
         dbWrite.delete(DBData.TABLE_NAME, selection, selectionArgs)
-    }
-
-    override fun initialize() {
-        Log.d("INFO", "Inicializando Base de Datos Local")
     }
 
     companion object {

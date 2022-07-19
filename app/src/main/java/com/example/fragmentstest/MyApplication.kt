@@ -2,7 +2,6 @@ package com.example.fragmentstest
 
 import android.app.Application
 import android.util.Log
-import com.example.fragmentstest.databases.FileStorage
 import com.example.fragmentstest.interfaces.Storage
 
 class MyApplication : Application() {

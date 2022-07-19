@@ -2,8 +2,6 @@ package com.example.fragmentstest.databases
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.util.Log
-import com.example.fragmentstest.MainActivity
 import com.example.fragmentstest.R
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.interfaces.Storage
@@ -11,12 +9,21 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 
 class SharedPrefsStorage(
-    val activityContext: Context
+    private val activityContext: Context
 ) : Storage {
 
     private val type = object : TypeToken<MutableList<User>?>() {}.type
-    private lateinit var sharedPrefEditor: SharedPreferences.Editor
-    private lateinit var sharedPref: SharedPreferences
+
+    private val sharedPref: SharedPreferences by lazy {
+        activityContext.getSharedPreferences(
+            activityContext.getString(R.string.error_creating_user),
+            Context.MODE_PRIVATE
+        )
+    }
+    private val sharedPrefEditor: SharedPreferences.Editor by lazy {
+        sharedPref.edit()
+    }
+
     private val gson by lazy { Gson() }
 
     override fun getUsers(): MutableList<User> {
@@ -27,10 +34,13 @@ class SharedPrefsStorage(
             emptyList<User>().toMutableList()
     }
 
-    override fun editUser(position: Int, user: User) {
-        val usersList = getUsers()
-        usersList[position] = user
-        saveList(usersList)
+    override fun editUser(user: User) {
+        val users = getUsers()
+        val selectedUser = users.find { it.id == user.id }
+        users.remove(selectedUser)
+        users.add(user)
+        users.sortBy { it.name }
+        saveList(users)
     }
 
     override fun addUser(user: User) {
@@ -39,20 +49,11 @@ class SharedPrefsStorage(
         saveList(usersList)
     }
 
-    override fun removeUser(position: Int) {
+    override fun removeUser(user: User) {
         val usersList = getUsers()
-        usersList.removeAt(position)
+        usersList.remove(user)
         usersList.sortBy { it.name }
         saveList(usersList)
-    }
-
-    override fun initialize() {
-        Log.d("INFO", "Inicializando Almacenamiento Externo")
-        sharedPref = activityContext.getSharedPreferences(
-            activityContext.getString(R.string.error_creating_user),
-            Context.MODE_PRIVATE
-        )
-        sharedPrefEditor = sharedPref.edit()
     }
 
     private fun saveList(usersList: List<User>) {

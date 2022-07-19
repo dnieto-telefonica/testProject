@@ -45,7 +45,6 @@ class FragmentList : Fragment(), FragmentListView {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        Log.d("INFO", "ONVIEW")
         this.setupList()
         this.setupSearchInput()
     }

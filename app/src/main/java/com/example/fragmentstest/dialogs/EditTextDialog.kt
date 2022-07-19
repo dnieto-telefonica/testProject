@@ -38,15 +38,19 @@ class EditTextDialog : DialogFragment() {
                 val number = etNumber.text.toString()
                 val address = etAddress.text.toString()
                 if (name != "" && number != "" && address != "") {
-                    var user = User(myStorage?.getUsers()?.size.toString(),
+                    var user = User(
+                        myStorage?.getUsers()?.size.toString(),
                         etName.text.toString(),
                         etNumber.text.toString(),
                         etAddress.text.toString(),
-                        R.drawable.ic_launcher_background, false)
+                        R.drawable.ic_launcher_background, false
+                    )
                     (activity as MainActivity).addUser(user)
                 } else {
-                    Toast.makeText(this.requireActivity().applicationContext,
-                        getString(R.string.error_creating_user), Toast.LENGTH_SHORT).show()
+                    Toast.makeText(
+                        this.requireActivity().applicationContext,
+                        getString(R.string.error_creating_user), Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
             .setNegativeButton(getString(R.string.cancel)) { _, _ ->

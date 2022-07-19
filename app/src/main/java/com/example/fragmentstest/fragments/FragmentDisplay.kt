@@ -105,14 +105,14 @@ class FragmentDisplay(
                     isFavorite
                 )
                 selectedUser = newUser
-                presenter.editUser(newUser, position)
+                presenter.editUser(newUser)
             } else {
                 AlertDialog.Builder(this.requireContext())
                     .setTitle(R.string.delete_contact)
                     .setMessage(R.string.delete_contact_conf)
                     .setPositiveButton(R.string.yes,
                         DialogInterface.OnClickListener { dialog, which ->
-                            presenter.removeUser(position)
+                            presenter.removeUser(selectedUser)
                         })
                     .setNegativeButton(R.string.no, null)
                     .setIcon(android.R.drawable.ic_dialog_alert)

@@ -1,18 +1,25 @@
 package com.example.fragmentstest.interfaces
 
-import com.example.fragmentstest.MainActivity
+import androidx.room.Dao
+import androidx.room.Delete
+import androidx.room.Insert
+import androidx.room.Query
+import androidx.room.Update
 import com.example.fragmentstest.models.User
 
+@Dao
 interface Storage {
 
+    @Query("SELECT * FROM usersList")
     fun getUsers(): List<User>
 
-    fun editUser(position: Int, user: User)
+    @Update
+    fun editUser(user: User)
 
+    @Insert
     fun addUser(user: User)
 
-    fun removeUser(position: Int)
-
-    fun initialize()
+    @Delete
+    fun removeUser(user: User)
 
 }
