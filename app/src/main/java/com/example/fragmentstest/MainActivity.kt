@@ -71,7 +71,7 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     }
 
     override fun onSelectUser(user: User, position: Int) {
-        fragmentDisplay = FragmentDisplay(user, position)
+        fragmentDisplay = FragmentDisplay.newInstance(user, position)
         supportFragmentManager.beginTransaction()
             .replace(R.id.fl_fragment_display, fragmentDisplay!!)
             .commit()

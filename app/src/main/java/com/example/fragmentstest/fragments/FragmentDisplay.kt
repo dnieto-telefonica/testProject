@@ -22,10 +22,7 @@ import com.example.fragmentstest.views.FragmentDisplayView
 import com.example.fragmentstest.views.MainActivityView
 import kotlinx.android.synthetic.main.fragment_display.*
 
-class FragmentDisplay(
-    var selectedUser: User,
-    val position: Int
-) : Fragment(), FragmentDisplayView {
+class FragmentDisplay : Fragment(), FragmentDisplayView {
 
     private val mainActivityView: MainActivityView by lazy { activity as MainActivity }
 
@@ -42,13 +39,32 @@ class FragmentDisplay(
         )
     }
 
+    companion object {
+        fun newInstance(user: User, position: Int): FragmentDisplay {
+            val f = FragmentDisplay()
+
+            val args = Bundle()
+            args.putSerializable("user", user)
+            args.putInt("position", position)
+            f.arguments = args
+
+            return f
+        }
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        this.activity?.window?.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+        myStorage = (this.context?.applicationContext as MyApplication).myDatabase
+        presenter = FragmentDisplayPresenter(
+            this, EditUserUseCase(myStorage),
+            RemoveUserUserCase(myStorage), myStorage
+        )
     }
 
     override fun onResume() {
         super.onResume()
+        val user = arguments?.getSerializable("user") as User
+        val position = arguments?.getInt("position") ?: 0
 
         ti_name.setText(selectedUser.name)
         ti_number.setText(selectedUser.number)
