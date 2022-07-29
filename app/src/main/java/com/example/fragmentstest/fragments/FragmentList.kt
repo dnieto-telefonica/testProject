@@ -26,13 +26,13 @@ import kotlinx.android.synthetic.main.fragment_list.*
 class FragmentList : Fragment(), FragmentListView {
     private val customAdapter by lazy { CustomAdapter(::onSelectUser) }
 
-    private val myStorage: Storage? by lazy {
+    private val myStorage: Storage by lazy {
         (this.context?.applicationContext as MyApplication).myDatabase
     }
     private val presenter: FragmentListPresenter by lazy {
         FragmentListPresenter(
             this, (activity as MainActivity),
-            SearchUsersUseCase(myStorage), myStorage
+            SearchUsersUseCase(myStorage)
         )
     }
 
@@ -50,7 +50,7 @@ class FragmentList : Fragment(), FragmentListView {
     }
 
     override fun setupList() {
-        if (myStorage?.getUsers() != null)
+        if (myStorage.getUsers() != null)
             customAdapter.usersList = myStorage!!.getUsers()
 
         rv_users.apply {
@@ -121,8 +121,8 @@ class FragmentList : Fragment(), FragmentListView {
         reloadUsers()
     }
 
-    fun reloadUsers() {
-        if (myStorage?.getUsers() != null)
+    private fun reloadUsers() {
+        if (myStorage.getUsers() != null)
             customAdapter.usersList = myStorage!!.getUsers()
     }
 }

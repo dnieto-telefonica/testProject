@@ -15,7 +15,7 @@ import com.example.fragmentstest.interfaces.Storage
 
 class EditTextDialog : DialogFragment() {
 
-    private val myStorage: Storage? by lazy {
+    private val myStorage: Storage by lazy {
         (this.context?.applicationContext as MyApplication).myDatabase
     }
 
@@ -39,7 +39,7 @@ class EditTextDialog : DialogFragment() {
                 val address = etAddress.text.toString()
                 if (name != "" && number != "" && address != "") {
                     var user = User(
-                        myStorage?.getUsers()?.size.toString(),
+                        myStorage.getUsers()?.size.toString(),
                         etName.text.toString(),
                         etNumber.text.toString(),
                         etAddress.text.toString(),

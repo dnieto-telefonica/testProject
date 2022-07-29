@@ -10,13 +10,12 @@ import com.example.fragmentstest.views.FragmentDisplayView
 class FragmentDisplayPresenter(
     var displayView: FragmentDisplayView?,
     private val editUserUseCase: EditUserUseCase,
-    private val removeUserUseCase: RemoveUserUseCase,
-    val myStorage: Storage?
+    private val removeUserUseCase: RemoveUserUseCase
 ) {
 
-    fun editUser(user: User) {
+    fun editUser(user: User, position: Int) {
         Log.d("INFO", "Cambiando información del usuario...")
-        editUserUseCase.editUser(user)
+        editUserUseCase.editUser(position, user)
         displayView?.onEditUser()
     }
 

@@ -18,28 +18,19 @@ import com.example.fragmentstest.views.MainActivityView
 import java.io.File
 
 class MainActivity : AppCompatActivity(), MainActivityView {
-    var fragmentDisplay: FragmentDisplay? = null
 
     private val presenter: MainActivityPresenter by lazy {
         MainActivityPresenter(
             this,
-            AddUserUseCase(myStorage),
-            myStorage
+            AddUserUseCase(myStorage)
         )
     }
-    private val myStorage: Storage? by lazy {
+    private val myStorage: Storage by lazy {
         (application as MyApplication).myDatabase
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        (applicationContext as MyApplication).myDatabase =
-            SharedPrefsStorage(applicationContext) // Change this line to change the storage type
-
-        if (myStorage is FileStorage)
-            (myStorage as FileStorage).folder =
-                File(getExternalFilesDir(null)!!, "usersData")
 
         PermissionsManager().checkESPermission(
             Manifest.permission.WRITE_EXTERNAL_STORAGE, this
@@ -71,9 +62,8 @@ class MainActivity : AppCompatActivity(), MainActivityView {
     }
 
     override fun onSelectUser(user: User, position: Int) {
-        fragmentDisplay = FragmentDisplay.newInstance(user, position)
         supportFragmentManager.beginTransaction()
-            .replace(R.id.fl_fragment_display, fragmentDisplay!!)
+            .replace(R.id.fl_fragment_display, FragmentDisplay.newInstance(user, position))
             .commit()
     }
 

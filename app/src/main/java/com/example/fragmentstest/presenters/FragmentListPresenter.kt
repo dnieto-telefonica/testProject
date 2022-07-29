@@ -11,7 +11,6 @@ class FragmentListPresenter(
     var listView: FragmentListView?,
     var mainActivityView: MainActivityView?,
     private val searchUsersUseCase: SearchUsersUseCase,
-    val myStorage: Storage?
 ) {
 
     fun performSearch(searchCondition: String) {

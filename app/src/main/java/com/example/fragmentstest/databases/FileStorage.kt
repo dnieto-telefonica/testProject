@@ -1,5 +1,6 @@
 package com.example.fragmentstest.databases
 
+import android.content.Context
 import com.example.fragmentstest.models.User
 import com.example.fragmentstest.interfaces.Storage
 import java.io.File
@@ -8,9 +9,13 @@ import java.io.FileOutputStream
 import java.io.ObjectInputStream
 import java.io.ObjectOutputStream
 
-class FileStorage : Storage {
+class FileStorage(
+    applicationContext: Context
+) : Storage {
 
-    lateinit var folder: File
+    private val folder: File by lazy {
+        File(applicationContext.getExternalFilesDir(null), "usersData")
+    }
     private val file: File by lazy {
         File(folder, "usersList.txt")
     }
